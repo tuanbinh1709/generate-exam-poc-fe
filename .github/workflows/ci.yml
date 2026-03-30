@@ -1,0 +1,25 @@
+name: CI
+on:
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  unit-tests:
+    name: unit-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm test
+
+  coverage-gate:
+    name: coverage-gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm test -- --coverage
+      - name: Check 80% minimum
+        run: |
+          # Parse coverage summary
+          # Fail if below 80%
